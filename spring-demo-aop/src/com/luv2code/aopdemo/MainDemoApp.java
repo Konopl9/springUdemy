@@ -19,6 +19,8 @@ public class MainDemoApp {
 
     // call business method
     Account account = new Account();
+    account.setName("Max");
+    account.setLevel("Gold");
     accountDAO.addAccount(account, false);
     membershipDAO.addAccount();
     membershipDAO.goToSleep();
