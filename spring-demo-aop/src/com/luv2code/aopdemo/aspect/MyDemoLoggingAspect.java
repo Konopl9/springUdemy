@@ -2,6 +2,7 @@ package com.luv2code.aopdemo.aspect;
 
 import com.luv2code.aopdemo.Account;
 import java.util.List;
+import java.util.logging.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -19,10 +20,12 @@ import org.springframework.stereotype.Component;
 @Order(3)
 public class MyDemoLoggingAspect {
 
+  private Logger logger = Logger.getLogger(getClass().getName());
+
   @Around("execution(* com.luv2code.aopdemo.service.*.getFortune(..))")
   public Object aroundGetFortune(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
     String method = proceedingJoinPoint.getSignature().toShortString();
-    System.out.println("\n Executing Around on method: " + method);
+    logger.info("\n Executing Around on method: " + method);
 
     long begin = System.currentTimeMillis();
 
@@ -32,7 +35,7 @@ public class MyDemoLoggingAspect {
 
     long duration = end - begin;
 
-    System.out.println("\n=====> Duration " + duration / 1000.0 + " seconds");
+    logger.info("\n=====> Duration " + duration / 1000.0 + " seconds");
 
     return result;
   }
@@ -40,7 +43,7 @@ public class MyDemoLoggingAspect {
   @After("execution(* com.luv2code.aopdemo.dao.AccountDAO.findAccounts(..))")
   public void afterFinallyFindAccountsAdvice(JoinPoint joinPoint) {
     String method = joinPoint.getSignature().toShortString();
-    System.out.println("\n Executing @After (finally) on method: " + method);
+    logger.info("\n Executing @After (finally) on method: " + method);
   }
 
   @AfterThrowing(
@@ -48,9 +51,9 @@ public class MyDemoLoggingAspect {
       throwing = "exc")
   public void afterThrowingFindAccountAdvice(JoinPoint joinPoint, Throwable exc) {
     String method = joinPoint.getSignature().toShortString();
-    System.out.println("\n Executing AfterThrowing on method: " + method);
+    logger.info("\n Executing AfterThrowing on method: " + method);
 
-    System.out.println("\n========> The exception is: " + exc);
+    logger.info("\n========> The exception is: " + exc);
   }
 
   @AfterReturning(
@@ -60,14 +63,14 @@ public class MyDemoLoggingAspect {
 
     // print method with method we are advising on
     String method = joinPoint.getSignature().toShortString();
-    System.out.println("\n Executing AfterReturning on method: " + method);
+    logger.info("\n Executing AfterReturning on method: " + method);
 
-    System.out.println("\n========> result is: " + result);
+    logger.info("\n========> result is: " + result);
 
     // convert the account names to upper case !!! BAD PRACTICE TO MODIFY THE DATA USING Aspect
     convertAccountToUpperCase(result);
 
-    System.out.println("\n========> result is: " + result);
+    logger.info("\n========> result is: " + result);
   }
 
   private void convertAccountToUpperCase(List<Account> result) {
@@ -79,12 +82,12 @@ public class MyDemoLoggingAspect {
 
   @Before("com.luv2code.aopdemo.aspect.LuvAopExpressions.forDaoPackageNoGetterSetter()")
   public void beforeAddAccountAdvice(JoinPoint joinPoint) {
-    System.out.println("\n=====>>> Executing @Before advice on addAccount()");
+    logger.info("\n=====>>> Executing @Before advice on addAccount()");
 
     // display the method signature
     MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
-    System.out.println("Method: " + methodSignature);
+    logger.info("Method: " + methodSignature);
 
     // display method arguments
 
@@ -93,12 +96,12 @@ public class MyDemoLoggingAspect {
 
     // loop through args
     for (Object arg : args) {
-      System.out.println(arg);
+      logger.info(arg.toString());
       if (arg instanceof Account) {
         // dowcast and print Account specific stuff
         Account account = (Account) arg;
-        System.out.println("account name: " + account.getName());
-        System.out.println("account level: " + account.getLevel());
+        logger.info("account name: " + account.getName());
+        logger.info("account level: " + account.getLevel());
       }
     }
   }
