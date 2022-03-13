@@ -20,16 +20,25 @@ import org.springframework.stereotype.Component;
 @Order(3)
 public class MyDemoLoggingAspect {
 
-  private Logger logger = Logger.getLogger(getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   @Around("execution(* com.luv2code.aopdemo.service.*.getFortune(..))")
   public Object aroundGetFortune(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
     String method = proceedingJoinPoint.getSignature().toShortString();
-    logger.info("\n Executing Around on method: " + method);
+    logger.info("\n Executing Around on method:" + method);
 
     long begin = System.currentTimeMillis();
 
-    Object result = proceedingJoinPoint.proceed();
+    Object result = null;
+
+    try {
+      result = proceedingJoinPoint.proceed();
+    } catch (Exception e) {
+     logger.warning(e.getMessage());
+//     result = "Major accident!";
+      // re-throw the exception
+      throw e;
+    }
 
     long end = System.currentTimeMillis();
 
