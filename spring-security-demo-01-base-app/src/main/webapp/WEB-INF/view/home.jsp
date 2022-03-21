@@ -19,6 +19,24 @@
     </p>
 
     <hr>
+
+    <security:authorize access="hasRole('MANAGER')">
+        <!-- A link to point to /leaders ... for MANAGERS -->
+        <p>
+            <a href="${pageContext.request.contextPath}/leaders">LeaderShip Meeting</a>
+            (Only for Manager peeps)
+        </p>
+    </security:authorize>
+
+    <security:authorize access="hasRole('ADMIN')">
+        <!-- A link to point to /systems ... for MANAGERS -->
+    <p>
+        <a href="${pageContext.request.contextPath}/systems">IT systems meeting</a>
+        (Only for Admin peeps)
+    </p>
+    <hr>
+    </security:authorize>
+
     <%--    display user name and role--%>
     <p>
         User: <security:authentication property="principal.username" />
