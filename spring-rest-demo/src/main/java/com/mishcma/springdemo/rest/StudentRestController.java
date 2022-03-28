@@ -4,6 +4,9 @@ import com.mishcma.springdemo.entity.Student;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,9 @@ public class StudentRestController {
     // define endpoint for "/students/{studentId}" - return student at index
     @GetMapping("/students/{studentId}")
     public Student getStudent(@PathVariable int studentId) {
+        if ((studentId < 0) || (studentId >= students.size())) {
+            throw new StudentNotFoundException("Student id not found - " + studentId);
+        }
         return students.get(studentId);
     }
 
@@ -36,4 +42,5 @@ public class StudentRestController {
     public List<Student> getStudents() {
         return students;
     }
+
 }
