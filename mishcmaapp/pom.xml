@@ -34,6 +34,18 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
     </dependency>
+
+    <!--		ADD SUPPORT FOR AUTOMATIC ACTUATOR-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!--		ADD SUPPORT FOR SPRING SECURITY-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
