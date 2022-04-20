@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
-
-  Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
   private final EmployeeService employeeService;
   // load employee data
@@ -48,9 +47,19 @@ public class EmployeeController {
     return "employees/employee-form";
   }
 
+  @GetMapping("/showFormForUpdate")
+  public String showFormForUpdate(@RequestParam("employeeId") int id, Model model) {
+    // ge the employee from the service
+    Employee employee = employeeService.findById(id);
+
+    // set employee as a model attribute to pre-populate the form
+    model.addAttribute("employee", employee);
+
+    return "employees/employee-form";
+  }
+
   @PostMapping("/save")
   public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-    logger.info(String.valueOf(employee));
     employeeService.save(employee);
 
     return "redirect:/employees/list";
